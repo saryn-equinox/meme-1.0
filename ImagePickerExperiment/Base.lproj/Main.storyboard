@@ -1,24 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="ImagePickerExperiment" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LAm-U5-D7v">
+                                <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                                <items>
+                                    <barButtonItem title="PickAlbum" image="photo" catalog="system" id="Z0I-Hv-Q8j">
+                                        <connections>
+                                            <action selector="pickAnImageFromAlbum:" destination="BYZ-38-t0r" id="rRw-Xf-CrS"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem title="PickCamera" image="camera" catalog="system" id="oki-OL-tfS">
+                                        <connections>
+                                            <action selector="pickAnImageFromCamera:" destination="BYZ-38-t0r" id="w3o-eT-SLU"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="j18-tv-MMF">
+                                <rect key="frame" x="0.0" y="128.5" width="320" height="311"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="311" id="ajz-G7-Sru"/>
+                                </constraints>
+                            </imageView>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" usesAttributedText="YES" allowsEditingTextAttributes="YES" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rTb-oK-1Z8">
+                                <rect key="frame" x="143.5" y="128.5" width="33" height="34"/>
+                                <attributedString key="attributedText"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" usesAttributedText="YES" allowsEditingTextAttributes="YES" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="naz-ak-Kmz">
+                                <rect key="frame" x="143.5" y="405.5" width="33" height="34"/>
+                                <attributedString key="attributedText"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters"/>
+                            </textField>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="rTb-oK-1Z8" firstAttribute="top" secondItem="j18-tv-MMF" secondAttribute="top" id="1gB-zO-3oj"/>
+                            <constraint firstItem="naz-ak-Kmz" firstAttribute="bottom" secondItem="j18-tv-MMF" secondAttribute="bottom" id="25e-vD-sY4"/>
+                            <constraint firstItem="j18-tv-MMF" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="71d-R1-Ax6"/>
+                            <constraint firstItem="rTb-oK-1Z8" firstAttribute="centerX" secondItem="j18-tv-MMF" secondAttribute="centerX" id="7D4-cg-raH"/>
+                            <constraint firstItem="j18-tv-MMF" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="7Tq-xG-pvf"/>
+                            <constraint firstItem="naz-ak-Kmz" firstAttribute="centerX" secondItem="j18-tv-MMF" secondAttribute="centerX" id="WWw-1N-fyL"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="LAm-U5-D7v" secondAttribute="bottom" id="ZXY-4j-2FW"/>
+                            <constraint firstItem="LAm-U5-D7v" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="glC-jP-1H3"/>
+                            <constraint firstItem="j18-tv-MMF" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="sGC-Py-3cq"/>
+                            <constraint firstItem="LAm-U5-D7v" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="wCW-s1-hqJ"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="bottomText" destination="naz-ak-Kmz" id="pap-FX-nYM"/>
+                        <outlet property="cameraItem" destination="oki-OL-tfS" id="mhc-pX-T3o"/>
+                        <outlet property="imagePickerView" destination="j18-tv-MMF" id="cT7-cy-UbW"/>
+                        <outlet property="topText" destination="rTb-oK-1Z8" id="5lA-Oc-Jtz"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="131.25" y="114.08450704225352"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="camera" catalog="system" width="128" height="94"/>
+        <image name="photo" catalog="system" width="128" height="93"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
