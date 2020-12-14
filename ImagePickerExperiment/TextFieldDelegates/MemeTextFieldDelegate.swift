@@ -1,14 +1,14 @@
 //
-//  TopTextFieldDelegate.swift
+//  MemeTextFieldDelegate.swift
 //  ImagePickerExperiment
 //
-//  Created by 邱浩庭 on 13/12/2020.
+//  Created on 13/12/2020.
 //
 
 import Foundation
 import UIKit
 
-class TopTextFieldDelegate: NSObject, UITextFieldDelegate {
+class MemeTextFieldDelegate: NSObject, UITextFieldDelegate {
     var isFirst = true
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -17,7 +17,6 @@ class TopTextFieldDelegate: NSObject, UITextFieldDelegate {
             isFirst = false
         }
     }
-    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()

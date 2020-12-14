@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  ImagePickerExperiment
 //
-//  Created by 邱浩庭 on 13/12/2020.
+//  Created on 13/12/2020.
 //
 
 import UIKit
