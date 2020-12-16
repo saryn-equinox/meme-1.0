@@ -33,6 +33,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     let topTextFieldDelegate = MemeTextFieldDelegate()
     let bottomTextFieldDelegate = MemeTextFieldDelegate()
     
+    var viewOriginY: CGFloat! // this variable used to set the frame back to original postion when keyBoard will hide
+    var memes: [Meme] = []
+    
     var memeTextAttributes: [NSAttributedString.Key: Any] = [
         NSAttributedString.Key.foregroundColor: UIColor.white,
         NSAttributedString.Key.strokeColor: UIColor.black,
@@ -44,26 +47,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        topText.text = "TOP"
-        bottomText.text = "BOTTOM"
-        
-        topText.borderStyle = .none
-        bottomText.borderStyle = .none
-        
-        topText.alpha = 0
-        bottomText.alpha = 0
-        
-        topText.textAlignment = .center
-        bottomText.textAlignment = .center
-        
-        topText.delegate = topTextFieldDelegate
-        bottomText.delegate = bottomTextFieldDelegate
-        
-        topText.defaultTextAttributes = memeTextAttributes
-        bottomText.defaultTextAttributes = memeTextAttributes
+        setTextFieldParameters(topText, topTextFieldDelegate, "ENTER TOP TEXT")
+        setTextFieldParameters(bottomText, bottomTextFieldDelegate, "ENTER BOTTOM TEXT")
         
         imagePickerView.contentMode = .scaleAspectFill
         shareButton.isEnabled = false
+        
+        viewOriginY = self.view.frame.origin.y
         print("load finished")
     }
     
@@ -80,6 +70,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         unsubscribeFromKeyboardNotifications()
     }
     
+    // Mark: Configure the parameters
+    
+    private func setTextFieldParameters(_ textField: UITextField, _ delegate: UITextFieldDelegate, _ text: String){
+        textField.defaultTextAttributes = memeTextAttributes
+        textField.delegate = delegate
+        textField.textAlignment = .center
+        textField.alpha = 0
+        textField.borderStyle = .none
+        textField.text = text
+    }
+    
+    
     // Mark: Add and Remove listeners for keyboard events
     
     func subscribeToKeyboardNotifications() {
@@ -95,16 +97,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @objc func keyboardWillShow(_ notification: Notification) {
         let temp = getKeyboardHeight(notification)
-//        print("Will Show: ", separator: "", terminator: "\t")
-//        print(temp)
+        print("Will Show: ", separator: "", terminator: "\t")
+        print(temp)
         view.frame.origin.y -= temp
     }
     
+    /**
+     Called when keyboardWillHide
+    my app sometimes will call keyboardWillShow twice when is should be called only once. So I keep track of the view.frame original y so that I can guaratnee to get back to the
+        right position
+     */
     @objc func keyboardWillHide(_ notification: Notification) {
-        let temp = getKeyboardHeight(notification)
+//        let temp = getKeyboardHeight(notification)
 //        print("Will Hide: ", separator: "", terminator: "\t")
 //        print(temp)
-        view.frame.origin.y += temp
+        view.frame.origin.y = viewOriginY
     }
     
     func getKeyboardHeight(_ notificatoin: Notification) -> CGFloat {
@@ -117,21 +124,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
      Pick an image from album
      */
     @IBAction func pickAnImageFromAlbum(_ sender: Any) {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
-        present(imagePicker, animated: true, completion: nil)
+        pickImageFromSource(.photoLibrary)
     }
     
     /**
      Pick an image from camera- taking photo
      */
     @IBAction func pickAnImageFromCamera(_ sender: Any) {
+        pickImageFromSource(.camera)
+     }
+    
+    /**
+     Helper function for picking Images
+     */
+    private func pickImageFromSource(_ source: UIImagePickerController.SourceType) {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.sourceType = .camera
+        imagePicker.sourceType = source
         present(imagePicker, animated: true, completion: nil)
-     }
+    }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let img = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
@@ -146,8 +157,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     // Mark: Save the meme
     
-    func save() {
-        let meme = Meme(topText.text!, bottomText.text!, imagePickerView.image!, generateMemedImage())
+    func save(_ memeImage: UIImage) {
+        memes.append(Meme(topText.text!, bottomText.text!, imagePickerView.image!, memeImage))
     }
     
     /**
@@ -170,15 +181,22 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return memedImage
     }
     
-    
     /**
      Share our meme
      */
     @IBAction func shareMeme(_ sender: Any) {
-        print("Called")
-        let activityVC  = UIActivityViewController(activityItems: [generateMemedImage()], applicationActivities: nil)
-//        activityVC.completionWithItemsHandler
+        let generatedMeme = generateMemedImage()
+        let activityVC  = UIActivityViewController(activityItems: [generatedMeme], applicationActivities: nil)
+        activityVC.completionWithItemsHandler = { [weak self] type, completed, items, error in
+
+            if completed {
+               self?.save(generatedMeme)
+            }
+
+            activityVC.dismiss(animated: true, completion: nil)
+        }
+
         present(activityVC, animated: true, completion: nil)
     }
-}
 
+}
